@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task List Web App</title>
+</head>
+<body>
+    <h1>Task List</h1>
+    <input type="text" id="taskInput" placeholder="Enter a task">
+    <select id="priority">
+        <option value="1">High</option>
+        <option value="2">Medium</option>
+        <option value="3">Low</option>
+    </select>
+    <button onclick="addTask()">Add Task</button>
+    <button onclick="showTasks()">Show Tasks</button>
+    
+    <h2>Task List</h2>
+    <pre id="taskOutput"></pre>
+
+    <script type="module">
+        import initModule from './TaskList.js';
+
+        initModule().then((Module) => {
+            function addTask() {
+                const task = document.getElementById("taskInput").value;
+                const priority = parseInt(document.getElementById("priority").value);
+                if (!task) {
+                    alert("Please enter a task!");
+                    return;
+                }
+
+                Module.ccall("addTask", null, ["string", "number"], [task, priority]);
+                alert("Task added!");
+            }
+
+            function showTasks() {
+                const tasks = Module.ccall("showTasks", "string", []);
+                document.getElementById("taskOutput").innerText = tasks;
+            }
+
+            window.addTask = addTask;
+            window.showTasks = showTasks;
+        });
+    </script>
+</body>
+</html>
